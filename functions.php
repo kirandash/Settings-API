@@ -8,7 +8,7 @@ function kd_initialize_theme_options(){
 	
 	// Define the settings field
 	add_settings_field(
-		'footer_field',					// The ID (or name) of the field
+		'footer_message',				// The ID (or name) of the field
 		'Theme Footer Message',			// The text used to label the field
 		'kd_footer_message_display',	// The cb fn used to render the field
 		'general'						// The section to which we are adding the field
@@ -30,4 +30,6 @@ add_action('admin_init','kd_initialize_theme_options');
 function kd_footer_message_display(){
 	echo '<input type="text" name="footer_message" id="footer_message" value="'.get_option('footer_message').'" />';
 } // end kd_footer_message_display
+
+// https://codex.wordpress.org/Function_Reference/add_settings_section
 ?>
