@@ -47,7 +47,11 @@
 			<a href="<?php echo esc_url( __( 'https://wordpress.org/', '_s' ) ); ?>"><?php printf( esc_html__( 'Proudly powered by %s', '_s' ), 'WordPress' ); ?></a>
 			<span class="sep"> | </span>
 			<?php printf( esc_html__( 'Theme: %1$s by %2$s.', '_s' ), '_s', '<a href="http://automattic.com/" rel="designer">Automattic</a>' ); ?>
-            <span id="footer-message"><?php echo get_option('footer_message'); ?></span>
+			<?php 	
+			$options = (array)get_option('footer_options');
+			$message = $options['message'];
+			?>
+            <span id="footer-message"><?php echo $message; ?></span>
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->
 </div><!-- #page -->
