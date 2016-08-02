@@ -8,17 +8,12 @@
  * Adds the 'kd Theme Options' to the 'Settings' menu in the WordPress
 */
 function kd_add_options_page(){
-	
-	// This will introduce a new top level menu
-	add_menu_page(
-		'Theme Options',			// The text to be displayed in the browser title bar
-		'Theme Options',			// The text to be used for the menu
+	add_options_page(
+		'KD Theme Options',			// The text to be displayed in the browser title bar
+		'KD Theme Options',			// The text to be used for the menu
 		'manage_options',			// The required capability of users to access this menu
 		'kd-theme-options',			// The slud by which the menu item is accessible
-		'kd_theme_options_display',	// The name of the cb function used to display the page content
-		''							// Provides a default icon for our menu page
-		//11,						// Avoid using this as there is potential chance of replacing other menu
-		//https://wordpress.org/support/topic/custom-post-type-menu-positions
+		'kd_theme_options_display'	// The name of the cb function used to display the page content
 	);
 }
 
