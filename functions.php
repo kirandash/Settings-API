@@ -33,27 +33,47 @@ add_action( 'admin_menu', 'kd_add_options_page' );
 */
 
 function kd_initialize_theme_options(){
-
+	
+	add_settings_section(
+		'options_section',							// The ID to use for this section in attribute tags
+		'Header Options',							// The title of the section rendered to the screen
+		'kd_theme_header_description_display',		// The function used to render the options for this section
+		'kd-theme-header-options'							// The ID of the page on which the section is rendered		
+	);
+	
 	// Let's introduce a section to be rendered on the new options page
 	add_settings_section(
-		'footer_section',				// The ID to use for this section in attribute tags
+		'options_section',				// The ID to use for this section in attribute tags
 		'Footer Options',				// The title of the section rendered to the screen
 		'kd_footer_options_display',	// The function used to render the options for this section
-		'kd-theme-options'				// The ID of the page on which the section is rendered
+		'kd-theme-footer-options'				// The ID of the page on which the section is rendered
 	);	
-	
+
+	add_settings_field(
+		'display_header',				// The ID (or name) of the field
+		'Display Header Text',			// The text used to label the field
+		'kd_header_text_display',		// The cb fn used to render the field
+		'kd-theme-header-options',		// The page on which we'll be rendering this field
+		'options_section'				// The section to which we are adding the field
+	);
+		
 	// Define the settings field
 	add_settings_field(
 		'footer_message',				// The ID (or name) of the field
 		'Theme Footer Message',			// The text used to label the field
 		'kd_footer_message_display',	// The cb fn used to render the field
-		'kd-theme-options',				// The page on which we'll be rendering this field
-		'footer_section'				// The section to which we are adding the field
+		'kd-theme-footer-options',				// The page on which we'll be rendering this field
+		'options_section'				// The section to which we are adding the field
 	);
-	
+
+	register_setting(
+		'options_section',				// The name of the group of the settings
+		'header_options'				// The name of the actual option (or setting)
+	);
+		
 	// Register the 'footer_message' setting with the 'General' section
 	register_setting(
-		'footer_section',				// The name of the group of the settings
+		'options_section',				// The name of the group of the settings
 		'footer_options'				// The name of the actual option (or setting)
 	);
 } // end kd_initialize_theme_options
@@ -72,10 +92,11 @@ function kd_theme_options_display(){
         	<?php
 				
 				// Renders the settings for the settings section identified as 'Footer Section'
-				settings_fields('footer_section');
+				settings_fields('options_section');
 				
 				// Renders all of the settings for 'kd-theme-options' section
-				do_settings_sections('kd-theme-options');
+				do_settings_sections('kd-theme-header-options');
+				do_settings_sections('kd-theme-footer-options');
 				
 				// Add the submit button to serialize the options
 				submit_button();
@@ -85,6 +106,35 @@ function kd_theme_options_display(){
 <?php
 } // end kd_theme_options_display
 
+/**
+ * Renders the description of the settings below the title of the header section
+ * and the above the actual settings.
+ */
+function kd_theme_header_description_display(){
+	echo "These options are designed to help you control whether or not you want to display your header.";
+}
+
+/**
+* Renders the input field for the 'Header Display' setting
+*/
+
+function kd_header_text_display(){
+	$options = (array)get_option('header_options');
+	$display = $options['display'];
+	
+	$html .= '<label for="header_options[display]">';
+	$html .= '<input type="checkbox" name="header_options[display]" id="header_options[display]" value="1" '.checked(1, $display, false).'';
+	$html .= '&nbsp;';
+	$html .= 'Display the header text.';
+	$html .= '</label>';
+	
+	echo $html;
+} // end kd_header_text_display
+
+/**
+ * Renders the description of the settings below the title of the section
+ * and the above the actual settings.
+ */
 function kd_footer_options_display(){
 	echo "These options are designed to help you control what's displayed in your footer.";
 } // end kd_footer_options_display
