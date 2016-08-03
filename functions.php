@@ -28,7 +28,7 @@ function kd_add_options_page(){
 		'Header Options',					// The text to be rendered in the menu
 		'manage_options',					// The required capability of users to access this menu
 		'header-options',					// The slug by which the sub menu is identified
-		'kd_theme_header_options_display'	//The function used to display the options for this menu page
+		'kd_theme_options_display'	//The function used to display the options for this menu page
 	);
 	
 	// Introduce a submenu page specifically for the footer options
@@ -38,7 +38,7 @@ function kd_add_options_page(){
 		'Footer Options',					// The text to be rendered in the menu
 		'manage_options',					// The required capability of users to access this menu
 		'footer-options',					// The slug by which the sub menu is identified
-		'kd_theme_footer_options_display'	//The function used to display the options for this menu page
+		'kd_theme_options_display'	//The function used to display the options for this menu page
 	);	
 }
 
@@ -111,17 +111,38 @@ function kd_theme_options_display(){
 ?>
 	<div class="wrap">
         <h2>Kiran Theme Options</h2>
+        
+        <?php settings_errors(); ?>
+        
+        <?php
+			$active_tab = 'header-options'; // default tab
+			if( isset( $_GET['page'] ) ) {
+				$active_tab = $_GET['page'];
+			} // end if
+		?>
+        
+        <h2 class="nav-tab-wrapper">
+        	<a href="?page=header-options" class="nav-tab <?php echo 'header-options' == $active_tab || 'kd-theme-options' == $active_tab ? 'nav-tab-active' : '';?>">Header Options</a>
+            <a href="?page=footer-options" class="nav-tab <?php echo 'footer-options' == $active_tab ? 'nav-tab-active' : '';?>">Footer Options</a>
+        </h2><!-- .nav-tab-wrapper -->
+        
         <form method="post" action="options.php">
         	<?php
 				
-				// Renders the settings for the settings section identified as 'Footer Section'
-				settings_fields('header_section');
-				settings_fields('footer_section');
-				
-				// Renders all of the settings for 'kd-theme-options' section
-				do_settings_sections('kd-theme-header-options');
-				do_settings_sections('kd-theme-footer-options');
-				
+				if('footer-options' == $active_tab){
+					
+					// Renders the settings for the settings section identified as 'Footer Section'
+					settings_fields('footer_section');
+					// Renders all of the settings for 'kd-theme-options' section
+					do_settings_sections('kd-theme-footer-options');
+					
+				}else{
+					
+					settings_fields('header_section');
+					do_settings_sections('kd-theme-header-options');
+					
+				}
+								
 				// Add the submit button to serialize the options
 				submit_button();
 			?>
@@ -129,54 +150,6 @@ function kd_theme_options_display(){
     </div><!-- .wrap -->
 <?php
 } // end kd_theme_options_display
-
-/**
- * Renders the content of the options page for the header options
- */
-function kd_theme_header_options_display(){
-?>
-	<div class="wrap">
-        <h2>Kiran Theme Options</h2>
-        <form method="post" action="options.php">
-        	<?php
-				
-				// Renders the settings for the settings section identified as 'Header Section'
-				settings_fields('header_section');
-				
-				// Renders all of the settings for 'header-options' section
-				do_settings_sections('kd-theme-header-options');
-				
-				// Add the submit button to serialize the options
-				submit_button();
-			?>
-        </form>
-    </div><!-- .wrap -->
-<?php
-} // end kd_theme_header_options_display
-
-/**
- * Renders the content of the options page for the footer options
- */
-function kd_theme_footer_options_display(){
-?>
-	<div class="wrap">
-        <h2>Kiran Theme Options</h2>
-        <form method="post" action="options.php">
-        	<?php
-				
-				// Renders the settings for the settings section identified as 'Header Section'
-				settings_fields('footer_section');
-				
-				// Renders all of the settings for 'footer-options' section
-				do_settings_sections('kd-theme-footer-options');
-				
-				// Add the submit button to serialize the options
-				submit_button();
-			?>
-        </form>
-    </div><!-- .wrap -->
-<?php
-} // end kd_theme_footer_options_display
 
 /**
  * Renders the description of the settings below the title of the header section
