@@ -11,8 +11,12 @@
 
 <body <?php body_class(); ?>>
 <div id="page" class="site">
-	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', '_s' ); ?></a>
-
+	
+	<?php 	
+	$header_options = (array)get_option('header_options');
+	$display = $header_options['display'];
+	?>
+    <?php if(1 == $display){ ?>
 	<header id="masthead" class="site-header" role="banner">
 		<div class="site-branding">
 			<?php
@@ -34,7 +38,8 @@
 			<?php wp_nav_menu( array( 'theme_location' => 'primary', 'menu_id' => 'primary-menu' ) ); ?>
 		</nav><!-- #site-navigation -->
 	</header><!-- #masthead -->
-
+	<?php } // endif ?>
+    
 	<div id="content" class="site-content">
 		
         <h2>Settings API</h2>
@@ -45,13 +50,14 @@
 	<footer id="colophon" class="site-footer" role="contentinfo">
 		<div class="site-info">
 			<a href="<?php echo esc_url( __( 'https://wordpress.org/', '_s' ) ); ?>"><?php printf( esc_html__( 'Proudly powered by %s', '_s' ), 'WordPress' ); ?></a>
-			<span class="sep"> | </span>
-			<?php printf( esc_html__( 'Theme: %1$s by %2$s.', '_s' ), '_s', '<a href="http://automattic.com/" rel="designer">Automattic</a>' ); ?>
 			<?php 	
-			$options = (array)get_option('footer_options');
-			$message = $options['message'];
+			$footer_options = (array)get_option('footer_options');
+			$message = $footer_options['message'];
 			?>
-            <span id="footer-message"><?php echo $message; ?></span>
+			<?php if(0 < strlen(trim($message))){ ?>
+            <span class="sep"> | </span>
+            <?php echo $message; ?>
+            <?php } ?>
 		</div><!-- .site-info -->
 	</footer><!-- #colophon -->
 </div><!-- #page -->
