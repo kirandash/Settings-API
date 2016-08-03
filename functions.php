@@ -88,13 +88,15 @@ function kd_initialize_theme_options(){
 
 	register_setting(
 		'header_section',				// The name of the group of the settings
-		'header_options'				// The name of the actual option (or setting)
+		'header_options',				// The name of the actual option (or setting)
+		'kd_sanitize_header_options'	// The callback to footer sanitization option
 	);
 		
 	// Register the 'footer_message' setting with the 'General' section
 	register_setting(
 		'footer_section',				// The name of the group of the settings
-		'footer_options'				// The name of the actual option (or setting)
+		'footer_options',				// The name of the actual option (or setting)
+		'kd_sanitize_footer_options'	// The callback to footer sanitization option
 	);
 } // end kd_initialize_theme_options
 
@@ -197,4 +199,43 @@ function kd_footer_message_display(){
 } // end kd_footer_message_display
 
 // https://codex.wordpress.org/Function_Reference/add_settings_section
+
+/**
+* Sanitizes the checkbox that's saved in the header options.
+* 
+* @param	array	$options				The array of options to be sanitized
+* @return	array	$sanitized_options		The array of sanitized options
+*/
+function kd_sanitize_header_options( $options ){
+	
+	$sanitized_options = array();
+	
+	if( 1 == $options['display']) {
+		$sanitized_options['display'] = 1;
+	} else {
+		$sanitized_options['display'] ='';
+	} // end ifelse
+	
+	return $sanitized_options;
+	
+} // end kd_sanitize_header_options
+
+/**
+* Sanitizes the text that's saved in the footer options.
+* 
+* @param	array	$options				The array of options to be sanitized
+* @return	array	$sanitized_options		The array of sanitized options
+*/
+
+function kd_sanitize_footer_options( $options ){
+	
+	$sanitized_options = array();
+	
+	foreach( $options as $option_key => $option_val ) {
+		$sanitized_options[ $option_key ] = strip_tags( stripslashes( $option_val ) );
+	} // end foreach
+	
+	return $sanitized_options;
+	
+} // end kd_sanitize_footer_options
 ?>
